@@ -27,7 +27,7 @@ class Scoring:
         self.grid: np.ndarray = grid
         self.possible_moves = possible_moves
 
-    def score_move(self, mask):
+    def score_move(self, mask) -> int:
         removed_lines = 0
         consecutive_ones = 0
         disjuncted = self.grid | mask
