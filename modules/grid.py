@@ -3,22 +3,8 @@ from typing import Tuple
 
 import numpy as np
 
-from shapes import Shape
 
-
-def all_zeros(arr: np.array) -> bool:
-    return not np.any(arr)
-
-
-def all_ones(arr: np.array) -> bool:
-    return np.all(arr)
-
-
-def any_ones(arr: np.array) -> bool:
-    return np.any(arr)
-
-
-def get_replacers(lines: List[int]) -> Tuple[List, List]:
+def get_replacers(lines: np.ndarray) -> Tuple[List, List]:
     closest_lines, farthest_lines = [], []
     for i in lines:
         if i < 5:
@@ -28,7 +14,7 @@ def get_replacers(lines: List[int]) -> Tuple[List, List]:
     return closest_lines, farthest_lines
 
 
-def roll_empty_lines(grid, lines: List[int]):
+def roll_empty_lines(grid, lines: np.ndarray) -> np.ndarray:
     closest_lines, farthest_lines = get_replacers(lines)
     new_states = closest_lines
     for i, line in enumerate(grid):
@@ -44,39 +30,22 @@ class Grid:
         self.grid = np.zeros((self.n, self.n), dtype=int)
 
     @property
-    def completed_rows(self):
-        rows = []
-        for i in range(0, self.n):
-            if all_ones(self.grid[i]):
-                rows.append(i)
-        return rows
+    def completed_rows(self) -> np.ndarray:
+        return np.where(np.all(self.grid, axis=1))[0]
 
     @property
-    def completed_cols(self):
-        cols = []
-        transposed = self.grid.T
-        for i in range(0, self.n):
-            if all_ones(transposed[i]):
-                cols.append(i)
-        return cols
+    def completed_cols(self) -> np.ndarray:
+        return np.where(np.all(self.grid, axis=0))[0]
 
-    def possible_moves_generator(self, shape: Shape):
-        for i in range(0, self.n - shape.height + 1):
-            for j in range(0, self.n - shape.width + 1):
-                mask = np.zeros((self.n, self.n), dtype=int)
-                mask[i : shape.height + i, j : shape.width + j] = shape.hash
-                if all_zeros(self.grid * mask):
-                    yield shape, mask
-
-    def transform(self, rows, cols):
+    def transform(self, rows: np.ndarray, cols: np.ndarray):
         _block_states = roll_empty_lines(self.grid, rows)
         block_states = roll_empty_lines(_block_states.T, cols)
         self.grid = block_states.T
 
     def apply_mask(self, mask) -> int:
         self.grid |= mask
-        completed_rows = self.completed_rows
-        completed_cols = self.completed_cols
+        completed_rows: np.ndarray = self.completed_rows
+        completed_cols: np.ndarray = self.completed_cols
         completed_lines = len(completed_rows) + len(completed_cols)
         if completed_lines > 0:
             self.transform(completed_rows, completed_cols)

@@ -1,5 +1,3 @@
-import random
-
 import numpy as np
 
 
@@ -31,6 +29,14 @@ class Shape:
         self.name = name
         self.shape = SHAPES[name]
 
+    @classmethod
+    def get_random_shape(cls, *shapes: 'Shape') -> 'Shape':
+        available_shapes = set(SHAPES.keys())
+        if shapes:
+            available_shapes -= set(shape.name for shape in shapes)
+        shape_name = np.random.choice(tuple(available_shapes))
+        return cls(shape_name)
+
     @property
     def hash(self) -> np.array:
         return self.shape
@@ -59,11 +65,3 @@ class Shape:
 
     def __repr__(self) -> str:
         return self.name
-
-
-def get_random_shape(*shapes: Shape) -> Shape:
-    available_shapes = set(SHAPES.keys())
-    if shapes:
-        available_shapes -= set(shape.name for shape in shapes)
-    shape_name = random.choice(tuple(available_shapes))
-    return Shape(shape_name)
