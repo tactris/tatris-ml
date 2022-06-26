@@ -2,9 +2,11 @@
 import typer
 from rich.progress import track
 
-from modules import GameOverException
+from modules import AI
+from modules import Brain
 from modules import Tactris
 from modules import print_results
+from modules.population import Population
 
 
 app = typer.Typer()
@@ -12,13 +14,15 @@ app = typer.Typer()
 
 def main(gen, repeat: int = 10, _debug: bool = False):
     scores = []
+    brain = Brain(is_first=True)
     for _ in range(repeat) if _debug else track(range(repeat), description=f"Generation {gen}"):
         tactris = Tactris(debug=_debug)
         while True:
-            try:
-                tactris.move()
-            except GameOverException:
+            shape, mask = AI.choose_best_move(brain, tactris.grid.grid, tactris.shape1, tactris.shape2)
+            if mask is None:
                 break
+            else:
+                tactris.apply_move(shape, mask)  # type: ignore
         scores.append(tactris.game_score.score)
 
     return scores
@@ -39,6 +43,27 @@ def run(repeat: int = 100):
 
 
 @app.command()
+def ai(population_size: int = 16):
+    population = Population(population_size)
+    while True:
+        if not population.are_all_players_dead():
+            # population.show()
+            population.update()
+        else:
+            population.natural_selection()
+            # population.show()
+            population.update()
+
+    # tactris = Tactris(debug=True)
+    # while True:
+    #     try:
+    #         tactris.move()
+    #     except GameOverException:
+    #         break
+    # print_results(tactris.game_score.score)
+
+
+@app.command()
 def debug():
     main(1, repeat=1, _debug=True)
 
@@ -54,3 +79,4 @@ def profile():
 
 if __name__ == "__main__":
     app()
+    # ai()

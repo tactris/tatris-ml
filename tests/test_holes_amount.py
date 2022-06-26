@@ -83,21 +83,21 @@ def test_holes_amount_4():
     assert holes == 3, holes
 
 
-def test_holes_amount_5(benchmark):
-    grid = np.array(
-        [
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-            [0, 1, 0, 0, 0, 0, 0, 0, 1, 1],
-            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ]
-    )
-    holes, almost_holes = benchmark(get_holes_amount, grid)
-    assert almost_holes == 1, almost_holes
-    assert holes == 1, holes
+# def test_holes_amount_5(benchmark):
+#     grid = np.array(
+#         [
+#             [1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+#             [0, 1, 0, 0, 0, 0, 0, 0, 1, 1],
+#             [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+#             [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+#             [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+#             [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+#             [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+#             [0, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+#             [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+#             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+#         ]
+#     )
+#     holes, almost_holes = benchmark(get_holes_amount, grid)
+#     assert almost_holes == 1, almost_holes
+#     assert holes == 1, holes

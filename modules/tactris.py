@@ -3,7 +3,6 @@ import numpy as np
 from .console import print_tactris
 from .game_score import GameScore
 from .grid import Grid
-from .scoring import Scoring
 from .shapes import Shape
 
 
@@ -21,6 +20,8 @@ class Tactris:
         self.shape1 = Shape.get_random_shape()
         self.shape2 = Shape.get_random_shape(self.shape1)
 
+        self.moves_count = 0
+
     def apply_move(self, shape: Shape, mask):
         if self.debug:
             print_tactris(self, mask)
@@ -32,9 +33,10 @@ class Tactris:
         else:
             self.shape2 = Shape.get_random_shape(self.shape1, self.shape2)
 
-    def move(self):
-        scoring = Scoring(self.grid.grid, self.shape1, self.shape2)
-        _shape, mask = scoring.choose_best_move()
-        if mask is None:
-            raise GameOverException("Game Over")
-        self.apply_move(_shape, mask)
+    @property
+    def score(self) -> int:
+        return self.game_score.score
+
+    @property
+    def tetris_rate(self) -> float:
+        return self.game_score.get_tetris_rate()

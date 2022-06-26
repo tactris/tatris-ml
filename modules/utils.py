@@ -7,6 +7,10 @@ def all_zeros(arr: np.array) -> bool:
     return not np.any(arr)
 
 
+def all_zeros2(arr: np.array) -> bool:
+    return sum(arr) == 0
+
+
 def all_ones(arr: np.array) -> bool:
     return bool(np.all(arr))
 

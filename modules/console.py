@@ -1,4 +1,3 @@
-import time
 from typing import List
 
 import numpy as np
@@ -18,7 +17,7 @@ def print_tactris(tactris, mask=None):
             title="            Grid               Shape1    Shape2    Score",
         )
     )
-    time.sleep(0.5)
+    # time.sleep(0.5)
 
 
 def print_results(total_scores: List[int]):
