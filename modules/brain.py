@@ -4,6 +4,14 @@ from typing import Dict
 from rich.table import Table
 
 
+EMPIRICAL_SCORES = {
+    'REMOVED_LINES_MULTIPLIER': 1239.19,
+    'CONSECUTIVE_ONES_MULTIPLIER': 21.85,
+    'HOLES_MULTIPLIER': -319.69,
+    'ALMOST_HOLES_MULTIPLIER': -77.37,
+}
+
+
 class Brain:
     def __init__(self, is_first: bool = False):
         self.multipliers: Dict[str, float] = {}
@@ -13,19 +21,14 @@ class Brain:
             self.randomize_multipliers()
 
     def set_as_my_multipliers(self):
-        self.multipliers = {
-            'REMOVED_LINES_MULTIPLIER': 794.07,
-            'CONSECUTIVE_ONES_MULTIPLIER': 23.54,
-            'HOLES_MULTIPLIER': -362.98,
-            'ALMOST_HOLES_MULTIPLIER': -84.40,
-        }
+        self.multipliers = EMPIRICAL_SCORES.copy()
 
     def randomize_multipliers(self):
         self.multipliers = {
-            'REMOVED_LINES_MULTIPLIER': 1500 * random.uniform(0, 2),
-            'CONSECUTIVE_ONES_MULTIPLIER': 60 * random.uniform(0, 2),
-            'HOLES_MULTIPLIER': -700 * random.uniform(0, 2),
-            'ALMOST_HOLES_MULTIPLIER': -500 * random.uniform(0, 2),
+            'REMOVED_LINES_MULTIPLIER': EMPIRICAL_SCORES['REMOVED_LINES_MULTIPLIER'] * random.uniform(0, 2),
+            'CONSECUTIVE_ONES_MULTIPLIER': EMPIRICAL_SCORES['CONSECUTIVE_ONES_MULTIPLIER'] * random.uniform(0, 2),
+            'HOLES_MULTIPLIER': EMPIRICAL_SCORES['HOLES_MULTIPLIER'] * random.uniform(0, 2),
+            'ALMOST_HOLES_MULTIPLIER': EMPIRICAL_SCORES['ALMOST_HOLES_MULTIPLIER'] * random.uniform(0, 2),
         }
 
     def mutate(self):
